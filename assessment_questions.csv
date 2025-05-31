@@ -1,0 +1,11 @@
+question_number,question_text,option_1,option_1_score,option_2,option_2_score,option_3,option_3_score,option_4,option_4_score,option_5,option_5_score,reverse_scored
+1,How many different communication platforms do you actively use for work?,1-2 platforms (email and one other),1,"3-4 platforms (email, messaging, video calls)",2,"5-6 platforms (multiple messaging apps, project tools)",3,7-8 platforms (extensive tool ecosystem),4,9+ platforms (overwhelming number of tools),5,No
+2,How many emails do you typically receive per day?,Fewer than 20 emails,1,21-50 emails,2,51-100 emails,3,101-150 emails,4,More than 150 emails,5,No
+3,How often do you receive work-related communications outside normal business hours?,Rarely or never,1,Once or twice per week,2,Several times per week,3,Daily,4,Multiple times daily,5,No
+4,How many meetings do you attend per week?,0-5 meetings,1,6-10 meetings,2,11-15 meetings,3,16-20 meetings,4,More than 20 meetings,5,No
+5,How often do you feel overwhelmed by the volume of communications you receive?,Never,1,Rarely,2,Sometimes,3,Often,4,Always,5,No
+6,How difficult is it for you to prioritize which messages require immediate attention?,Very easy,1,Somewhat easy,2,Neutral,3,Somewhat difficult,4,Very difficult,5,No
+7,How often are you interrupted by notifications during focused work time?,Rarely (less than once per hour),1,Occasionally (1-2 times per hour),2,Moderately (3-5 times per hour),3,Frequently (6-10 times per hour),4,Constantly (more than 10 times per hour),5,No
+8,How well do you manage your response time expectations with colleagues?,"Very well - I have clear, consistent boundaries",1,Well - I have clear expectations with most people,2,Moderately - Some boundaries but inconsistent,3,Poorly - I often respond faster than necessary,4,Very poorly - I feel pressured to respond immediately,5,Yes
+9,How often do you find yourself switching between different communication platforms during a single conversation?,Never,1,Rarely,2,Sometimes,3,Often,4,Very often,5,No
+10,How much uninterrupted time do you have for focused work on a typical day?,More than 4 hours,1,2-4 hours,2,1-2 hours,3,30 minutes to 1 hour,4,Less than 30 minutes,5,Yes
