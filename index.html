@@ -5,613 +5,266 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Communication Overload Assessment</title>
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            background-color: #f9f9f9;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        header {
+            background-color: #005a87;
             color: white;
-            padding: 40px 30px;
+            padding: 1em 0;
             text-align: center;
         }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #4facfe;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .content {
-            padding: 40px 30px;
-        }
-
-        .question {
-            margin-bottom: 30px;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #4facfe;
-        }
-
-        .question h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            font-weight: 600;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
+        main {
+            max-width: 700px;
+            margin: 2em auto;
             background: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
-        .option:hover {
-            background: #e3f2fd;
+        h1, h2, h3 {
+            color: #005a87;
         }
-
-        .option input[type="radio"] {
-            margin-right: 10px;
-            transform: scale(1.2);
+        ul {
+            list-style-type: disc;
+            padding-left: 1.5em;
         }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        a {
+            color: #007acc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .stat-box {
+            background:#f4f8fb;
+            padding:1em 1.5em;
+            border-radius:8px;
+            margin:1.5em 0;
+        }
+        .resource-box {
+            background:#e7f6e7;
+            padding:1em 1.5em;
+            border-radius:8px;
+        }
+        label {
+            display: block;
+            margin: 0.5em 0 0.2em;
+            font-weight: bold;
+        }
+        input[type=radio] {
+            margin-right: 0.5em;
+        }
+        .question {
+            margin-bottom: 1.5em;
+        }
+        button {
+            background-color: #005a87;
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border-radius: 25px;
+            padding: 0.75em 1.5em;
+            font-size: 1em;
+            border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            display: block;
-            margin: 30px auto 0;
         }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
+        button:hover {
+            background-color: #004466;
         }
-
-        .results {
+        #result {
+            margin-top: 2em;
+            padding: 1em;
+            background-color: #d9edf7;
+            border: 1px solid #bce8f1;
+            border-radius: 5px;
             display: none;
-            margin-top: 30px;
-            padding: 25px;
-            background: #e8f5e8;
-            border-radius: 10px;
-            border-left: 4px solid #4caf50;
-        }
-
-        .results.show {
-            display: block;
-        }
-
-        .score {
-            font-size: 2em;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .interpretation {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-
-        .recommendations {
-            margin-top: 20px;
-        }
-
-        .recommendations h4 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .recommendations ul {
-            padding-left: 20px;
-        }
-
-        .recommendations li {
-            margin-bottom: 8px;
-        }
-
-        @media (max-width: 600px) {
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-                padding: 20px;
-            }
-
-            .content {
-                padding: 20px;
-            }
-
-            .question {
-                padding: 20px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Communication Overload Assessment</h1>
-            <p>Evaluate your current communication load and discover strategies for better management</p>
-        </div>
+<header>
+    <h1>Communication Overload Assessment</h1>
+</header>
+<main>
+  <section id="intro">
+    <h2>Communication Overload: Why It Matters</h2>
+    <p>
+      In today’s digital workplace, professionals are inundated with messages and meetings—often at the expense of their most important work. Understanding the scale and impact of communication overload is the first step toward reclaiming your time and wellbeing.
+    </p>
 
-        <div class="stats">
-            <div class="stat-item">
-                <span class="stat-number">121</span>
-                <div class="stat-label">Emails per day</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">88%</span>
-                <div class="stat-label">Time communicating</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">60%</span>
-                <div class="stat-label">Workers stressed</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">$1.2T</span>
-                <div class="stat-label">Annual losses</div>
-            </div>
-        </div>
-
-        <div class="content">
-            <form id="assessmentForm">
-                <div class="question">
-                    <h3>1. How many different communication platforms do you actively use for work?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q1" value="1">
-                            1-2 platforms (email and one other)
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q1" value="2">
-                            3-4 platforms (email, messaging, video calls)
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q1" value="3">
-                            5-6 platforms (multiple messaging apps, project tools)
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q1" value="4">
-                            7-8 platforms (extensive tool ecosystem)
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q1" value="5">
-                            9+ platforms (overwhelming number of tools)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>2. How many emails do you typically receive per day?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q2" value="1">
-                            Fewer than 20 emails
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q2" value="2">
-                            21-50 emails
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q2" value="3">
-                            51-100 emails
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q2" value="4">
-                            101-150 emails
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q2" value="5">
-                            More than 150 emails
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>3. How often do you receive work-related communications outside normal business hours?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q3" value="1">
-                            Rarely or never
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q3" value="2">
-                            Once or twice per week
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q3" value="3">
-                            Several times per week
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q3" value="4">
-                            Daily
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q3" value="5">
-                            Multiple times daily
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>4. How many meetings do you attend per week?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q4" value="1">
-                            0-5 meetings
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q4" value="2">
-                            6-10 meetings
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q4" value="3">
-                            11-15 meetings
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q4" value="4">
-                            16-20 meetings
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q4" value="5">
-                            More than 20 meetings
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>5. How often do you feel overwhelmed by the volume of communications you receive?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q5" value="1">
-                            Never
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q5" value="2">
-                            Rarely
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q5" value="3">
-                            Sometimes
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q5" value="4">
-                            Often
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q5" value="5">
-                            Always
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>6. How difficult is it for you to prioritize which messages require immediate attention?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q6" value="1">
-                            Very easy
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q6" value="2">
-                            Somewhat easy
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q6" value="3">
-                            Neutral
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q6" value="4">
-                            Somewhat difficult
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q6" value="5">
-                            Very difficult
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>7. How often are you interrupted by notifications during focused work time?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q7" value="1">
-                            Rarely (less than once per hour)
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q7" value="2">
-                            Occasionally (1-2 times per hour)
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q7" value="3">
-                            Moderately (3-5 times per hour)
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q7" value="4">
-                            Frequently (6-10 times per hour)
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q7" value="5">
-                            Constantly (more than 10 times per hour)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>8. How well do you manage your response time expectations with colleagues?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q8" value="5">
-                            Very poorly - I feel pressured to respond immediately
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q8" value="4">
-                            Poorly - I often respond faster than necessary
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q8" value="3">
-                            Moderately - Some boundaries but inconsistent
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q8" value="2">
-                            Well - I have clear expectations with most people
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q8" value="1">
-                            Very well - I have clear, consistent boundaries
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>9. How often do you find yourself switching between different communication platforms during a single conversation?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q9" value="1">
-                            Never
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q9" value="2">
-                            Rarely
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q9" value="3">
-                            Sometimes
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q9" value="4">
-                            Often
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q9" value="5">
-                            Very often
-                        </label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h3>10. How much uninterrupted time do you have for focused work on a typical day?</h3>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q10" value="5">
-                            Less than 30 minutes
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q10" value="4">
-                            30 minutes to 1 hour
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q10" value="3">
-                            1-2 hours
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q10" value="2">
-                            2-4 hours
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q10" value="1">
-                            More than 4 hours
-                        </label>
-                    </div>
-                </div>
-
-                <button type="button" class="submit-btn" onclick="calculateScore()">Calculate My Communication Overload Score</button>
-            </form>
-
-            <div id="results" class="results">
-                <div id="scoreDisplay" class="score"></div>
-                <div id="interpretation" class="interpretation"></div>
-                <div id="recommendations" class="recommendations"></div>
-            </div>
-        </div>
+    <div class="stat-box">
+      <h3>Key Statistics</h3>
+      <ul>
+        <li>
+          <strong>121 emails per day:</strong> The average office worker receives 121 emails daily, contributing to stress, interruptions, and lost productivity.<br>
+          <small>
+            Source: <a href="https://www.brosix.com/blog/digital-communication-overload/" target="_blank">Brosix, 2023</a>
+          </small>
+        </li>
+        <li>
+          <strong>88% of the workweek spent communicating:</strong> Most knowledge workers spend up to 88% of their week on emails, chats, meetings, and calls, leaving little time for focused work.<br>
+          <small>
+            Sources: <a href="https://www.brosix.com/blog/digital-communication-overload/" target="_blank">Brosix, 2023</a>, <a href="https://quantified.ai/blog/how-much-of-our-workdays-do-we-spend-communicating/" target="_blank">Quantified AI, 2023</a>
+          </small>
+        </li>
+        <li>
+          <strong>60% experience digital communication burnout:</strong> A majority of employees report that communication overload negatively impacts their wellbeing and job satisfaction.<br>
+          <small>
+            Source: <a href="https://www.brosix.com/blog/digital-communication-overload/" target="_blank">Brosix, 2023</a>
+          </small>
+        </li>
+      </ul>
     </div>
 
-    <script>
-        function calculateScore() {
-            const form = document.getElementById('assessmentForm');
-            const formData = new FormData(form);
-            let totalScore = 0;
-            let answeredQuestions = 0;
+    <div class="resource-box">
+      <h3>Helpful Resources</h3>
+      <ul>
+        <li>
+          <a href="https://www.brosix.com/blog/digital-communication-overload/" target="_blank">
+            Digital Communication Overload: The Latest Workplace Statistics (Brosix)
+          </a>
+        </li>
+        <li>
+          <a href="https://quantified.ai/blog/how-much-of-our-workdays-do-we-spend-communicating/" target="_blank">
+            How Much of Our Workdays Do We Spend Communicating? (Quantified AI)
+          </a>
+        </li>
+        <li>
+          <a href="https://www.brosix.com/blog/how-to-reduce-email-overload/" target="_blank">
+            How to Reduce Email Overload: Practical Tips (Brosix)
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-            // Check if all questions are answered
-            for (let i = 1; i <= 10; i++) {
-                const value = formData.get(`q${i}`);
-                if (value) {
-                    totalScore += parseInt(value);
-                    answeredQuestions++;
-                }
-            }
+  <section id="assessment">
+    <h2>Assessment Questions</h2>
+    <form id="assessmentForm">
+      <div class="question">
+        <label>1. How often do you feel overwhelmed by the volume of emails you receive?</label>
+        <input type="radio" name="q1" value="1" required> Never<br>
+        <input type="radio" name="q1" value="2"> Rarely<br>
+        <input type="radio" name="q1" value="3"> Sometimes<br>
+        <input type="radio" name="q1" value="4"> Often<br>
+        <input type="radio" name="q1" value="5"> Always
+      </div>
+      <div class="question">
+        <label>2. How frequently do you check your email during work hours?</label>
+        <input type="radio" name="q2" value="1" required> Rarely<br>
+        <input type="radio" name="q2" value="2"> Occasionally<br>
+        <input type="radio" name="q2" value="3"> Sometimes<br>
+        <input type="radio" name="q2" value="4"> Often<br>
+        <input type="radio" name="q2" value="5"> Constantly
+      </div>
+      <div class="question">
+        <label>3. How often do you feel stressed by the number of meetings you attend?</label>
+        <input type="radio" name="q3" value="1" required> Never<br>
+        <input type="radio" name="q3" value="2"> Rarely<br>
+        <input type="radio" name="q3" value="3"> Sometimes<br>
+        <input type="radio" name="q3" value="4"> Often<br>
+        <input type="radio" name="q3" value="5"> Always
+      </div>
+      <div class="question">
+        <label>4. How often do you feel distracted by notifications from communication apps?</label>
+        <input type="radio" name="q4" value="1" required> Never<br>
+        <input type="radio" name="q4" value="2"> Rarely<br>
+        <input type="radio" name="q4" value="3"> Sometimes<br>
+        <input type="radio" name="q4" value="4"> Often<br>
+        <input type="radio" name="q4" value="5"> Always
+      </div>
+      <div class="question">
+        <label>5. How often do you find it difficult to prioritize messages and tasks?</label>
+        <input type="radio" name="q5" value="1" required> Never<br>
+        <input type="radio" name="q5" value="2"> Rarely<br>
+        <input type="radio" name="q5" value="3"> Sometimes<br>
+        <input type="radio" name="q5" value="4"> Often<br>
+        <input type="radio" name="q5" value="5"> Always
+      </div>
+      <div class="question">
+        <label>6. How often do you feel pressured to respond immediately to messages?</label>
+        <input type="radio" name="q6" value="1" required> Never<br>
+        <input type="radio" name="q6" value="2"> Rarely<br>
+        <input type="radio" name="q6" value="3"> Sometimes<br>
+        <input type="radio" name="q6" value="4"> Often<br>
+        <input type="radio" name="q6" value="5"> Always
+      </div>
+      <div class="question">
+        <label>7. How often do you multitask between different communication channels?</label>
+        <input type="radio" name="q7" value="1" required> Never<br>
+        <input type="radio" name="q7" value="2"> Rarely<br>
+        <input type="radio" name="q7" value="3"> Sometimes<br>
+        <input type="radio" name="q7" value="4"> Often<br>
+        <input type="radio" name="q7" value="5"> Always
+      </div>
+      <div class="question">
+        <label>8. How often do you set aside focused time without interruptions?</label>
+        <input type="radio" name="q8" value="5" required> Always<br>
+        <input type="radio" name="q8" value="4"> Often<br>
+        <input type="radio" name="q8" value="3"> Sometimes<br>
+        <input type="radio" name="q8" value="2"> Rarely<br>
+        <input type="radio" name="q8" value="1"> Never
+      </div>
+      <div class="question">
+        <label>9. How often do you feel overwhelmed by the number of communication channels you must monitor?</label>
+        <input type="radio" name="q9" value="1" required> Never<br>
+        <input type="radio" name="q9" value="2"> Rarely<br>
+        <input type="radio" name="q9" value="3"> Sometimes<br>
+        <input type="radio" name="q9" value="4"> Often<br>
+        <input type="radio" name="q9" value="5"> Always
+      </div>
+      <div class="question">
+        <label>10. How often do you feel you can manage your communication effectively?</label>
+        <input type="radio" name="q10" value="5" required> Always<br>
+        <input type="radio" name="q10" value="4"> Often<br>
+        <input type="radio" name="q10" value="3"> Sometimes<br>
+        <input type="radio" name="q10" value="2"> Rarely<br>
+        <input type="radio" name="q10" value="1"> Never
+      </div>
+      <button type="submit">Get My Score</button>
+    </form>
 
-            if (answeredQuestions < 10) {
-                alert('Please answer all questions before calculating your score.');
-                return;
-            }
+    <div id="result"></div>
+  </section>
 
-            displayResults(totalScore);
+  <script>
+    document.getElementById('assessmentForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const form = event.target;
+      let score = 0;
+      let maxScore = 50;
+      // Questions 8 and 10 are reverse scored
+      const reverseScored = [8, 10];
+
+      for (let i = 1; i <= 10; i++) {
+        const qName = 'q' + i;
+        const selected = form.elements[qName].value;
+        let val = parseInt(selected);
+        if (reverseScored.includes(i)) {
+          val = 6 - val; // Reverse scoring
         }
+        score += val;
+      }
 
-        function displayResults(score) {
-            const resultsDiv = document.getElementById('results');
-            const scoreDisplay = document.getElementById('scoreDisplay');
-            const interpretation = document.getElementById('interpretation');
-            const recommendations = document.getElementById('recommendations');
+      let interpretation = '';
+      if (score <= 15) {
+        interpretation = 'Low communication overload. Your communication habits are well balanced.';
+      } else if (score <= 25) {
+        interpretation = 'Moderate communication overload. Consider basic strategies to improve your communication management.';
+      } else if (score <= 35) {
+        interpretation = 'High communication overload. It is advisable to implement significant changes to reduce communication stress.';
+      } else {
+        interpretation = 'Severe communication overload. Immediate action is recommended to manage your communication effectively.';
+      }
 
-            scoreDisplay.textContent = `Your Score: ${score}/50`;
-
-            let level, description, recs;
-
-            if (score <= 15) {
-                level = "Low Communication Overload";
-                description = "You're managing your communications well! You have good boundaries and effective systems in place.";
-                recs = [
-                    "Continue your current communication practices",
-                    "Consider mentoring colleagues who struggle with communication overload",
-                    "Stay alert for signs of increasing communication demands",
-                    "Regularly review and optimize your communication tools"
-                ];
-                resultsDiv.style.background = "#e8f5e8";
-                resultsDiv.style.borderLeftColor = "#4caf50";
-            } else if (score <= 25) {
-                level = "Moderate Communication Overload";
-                description = "You're experiencing some communication challenges that could benefit from targeted improvements.";
-                recs = [
-                    "Set specific times for checking email (e.g., 3 times daily)",
-                    "Turn off non-essential notifications during focus time",
-                    "Create templates for common responses",
-                    "Establish clear response time expectations with your team",
-                    "Use 'Do Not Disturb' modes more frequently"
-                ];
-                resultsDiv.style.background = "#fff3cd";
-                resultsDiv.style.borderLeftColor = "#ffc107";
-            } else if (score <= 35) {
-                level = "High Communication Overload";
-                description = "Your communication load is significantly impacting your productivity and likely your well-being.";
-                recs = [
-                    "Immediately audit and consolidate communication tools",
-                    "Implement strict email batching (check only 2-3 times daily)",
-                    "Use auto-responders to set response time expectations",
-                    "Block calendar time for uninterrupted focus work",
-                    "Discuss communication protocols with your manager",
-                    "Consider declining non-essential meetings",
-                    "Turn off all non-urgent notifications"
-                ];
-                resultsDiv.style.background = "#f8d7da";
-                resultsDiv.style.borderLeftColor = "#dc3545";
-            } else {
-                level = "Severe Communication Overload";
-                description = "You're experiencing critical communication overload that requires immediate intervention.";
-                recs = [
-                    "Schedule immediate discussion with your manager about workload",
-                    "Implement emergency communication boundaries",
-                    "Consider professional help for stress management",
-                    "Drastically reduce communication channels (keep only essential)",
-                    "Use vacation auto-responder even when not on vacation",
-                    "Delegate communication responsibilities where possible",
-                    "Seek organizational support for communication management training",
-                    "Consider whether current role is sustainable without major changes"
-                ];
-                resultsDiv.style.background = "#f8d7da";
-                resultsDiv.style.borderLeftColor = "#dc3545";
-            }
-
-            interpretation.innerHTML = `<strong>${level}</strong><br>${description}`;
-
-            const recList = recs.map(rec => `<li>${rec}</li>`).join('');
-            recommendations.innerHTML = `<h4>Recommended Actions:</h4><ul>${recList}</ul>`;
-
-            resultsDiv.classList.add('show');
-            resultsDiv.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Add some visual feedback for radio button selection
-        document.addEventListener('DOMContentLoaded', function() {
-            const options = document.querySelectorAll('.option');
-            options.forEach(option => {
-                option.addEventListener('click', function() {
-                    const radio = this.querySelector('input[type="radio"]');
-                    radio.checked = true;
-
-                    // Remove selected class from siblings
-                    const questionDiv = this.closest('.question');
-                    const siblingOptions = questionDiv.querySelectorAll('.option');
-                    siblingOptions.forEach(sibling => {
-                        sibling.style.background = 'white';
-                    });
-
-                    // Add selected styling
-                    this.style.background = '#e3f2fd';
-                });
-            });
-        });
-    </script>
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = `<h3>Your Score: ${score} / ${maxScore}</h3><p>${interpretation}</p>`;
+    });
+  </script>
+</main>
 </body>
 </html>
